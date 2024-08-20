@@ -1,7 +1,7 @@
 import UserRepository from "../repositories/user.repository"
 import { IUser } from "../entities/user.entity";
 
-const UserServices = {
+const UserService = {
     getAllUsers: async () => {
         try {
             const users = await UserRepository.getAllUsers();
