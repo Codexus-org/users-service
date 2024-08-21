@@ -23,6 +23,13 @@ const UserController = {
             console.log(error);
         }
     },
+
+    // Get user
+    handleGetUser: async (req: Request, res: Response) => {
+        const { id } = req.params;
+        const user = await UserService.getUser(id);
+        return res.status(200).json({ message: "User", data: user });
+    }
 };
 
 export default UserController;

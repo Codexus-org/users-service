@@ -9,4 +9,4 @@ Content-Type: application/json
 }
 
 ### Get All Users
-GET http:localhost:8000/users-services
+GET http://localhost:8000/users-services
