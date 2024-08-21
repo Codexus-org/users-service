@@ -34,6 +34,16 @@ const UserRepository = {
         } catch (error) {
             console.log(`Error while creating user: ${error}`);
         }
+    },
+
+    loginUser: async (email: string) => {
+        try {
+            const user = await User.findOne({ email });
+            return user;
+        } catch (error) {
+            console.log(`Error while login user: ${error}`);
+        }
+
     }
 };
 

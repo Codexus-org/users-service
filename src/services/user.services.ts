@@ -1,4 +1,5 @@
 import UserRepository from "../repositories/user.repository"
+import bcrypt from "bcrypt";
 import { IUser } from "../entities/user.entity";
 
 const UserService = {
@@ -26,6 +27,37 @@ const UserService = {
             return newUser;
         } catch (error) {
             console.log(error);
+        }
+    },
+
+    loginUser: async (loginData: {email: string, password: string}) => {
+        try {
+
+            const { email, password } = loginData;
+
+            if (!email || password.length < 8) {
+                return "email should be valid and password should have minimum 8 characters";
+            }
+
+            // find user
+            const user = await UserRepository.loginUser(email);
+
+            // check if user exists
+            if (!user) {
+                return "User not found";
+            }
+
+            // compare password
+            const isPassMatch = await bcrypt.compare(password, user.password as string);
+
+            // check if password matches
+            if (!isPassMatch) {
+                return "Invalid password";
+            }
+            
+            return user;
+        } catch (error) {
+            console.log(`Error while login user: ${error}`);
         }
     }
 };
