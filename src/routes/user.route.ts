@@ -7,4 +7,6 @@ userRouter.get("/", UserController.handleGetAllUsers);
 userRouter.get("/:id", UserController.handleGetUser);
 userRouter.post("/", UserController.handleCreateUser);
 userRouter.post("/login", UserController.handleLoginUser);
+userRouter.delete("/:id", UserController.handleDeleteUser);
+
 

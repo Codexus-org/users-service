@@ -48,6 +48,17 @@ const UserController = {
         } catch (error) {
             console.log(error);
         }
+    },
+
+    handleDeleteUser: async (req: Request, res: Response) => {
+        const userId = req.params.id;
+        
+        try {
+            const deletedUser = await UserService.deleteUser(userId);
+            return res.status(200).json({ message: "User deleted", data: deletedUser });
+        } catch (error) {
+            console.log(error);
+        }
     }
 
 };

@@ -44,6 +44,15 @@ const UserRepository = {
             console.log(`Error while login user: ${error}`);
         }
 
+    },
+
+    deleteUser: async (id: string) => {
+        try {
+            const userId = await User.findByIdAndDelete(id);
+            return userId;
+        } catch (error) {
+            console.log(error);
+        }
     }
 };
 

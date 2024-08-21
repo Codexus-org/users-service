@@ -54,10 +54,19 @@ const UserService = {
             if (!isPassMatch) {
                 return "Invalid password";
             }
-            
+
             return user;
         } catch (error) {
             console.log(`Error while login user: ${error}`);
+        }
+    },
+
+    deleteUser: async (id: string) => {
+        try {
+            const userId = await UserRepository.deleteUser(id);
+            return userId;
+        } catch (error) {
+            console.log(error);
         }
     }
 };
