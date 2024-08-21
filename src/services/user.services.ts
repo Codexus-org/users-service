@@ -68,6 +68,15 @@ const UserService = {
         } catch (error) {
             console.log(error);
         }
+    },
+
+    updateUser: async (id: string, user: IUser) => {
+        try {
+            const updatedUser = await UserRepository.updateUser(id, user);
+            return updatedUser;
+        } catch (error) {
+            console.log(error);
+        }
     }
 };
 

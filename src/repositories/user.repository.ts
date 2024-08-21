@@ -53,6 +53,15 @@ const UserRepository = {
         } catch (error) {
             console.log(error);
         }
+    },
+
+    updateUser: async (id: string, user: IUser) => {
+        try {
+            const updatedUser = await User.findByIdAndUpdate(id, user);
+            return updatedUser;
+        } catch (error) {
+            console.log(error);
+        }
     }
 };
 

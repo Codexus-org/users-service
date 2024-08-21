@@ -25,3 +25,14 @@ Content-Type: application/json
 
 ### Delete User
 DELETE http://localhost:8000/users-services/66c5435841baf50cdaa368f5
+
+### Update User
+PATCH http://localhost:8000/users-services/66c542d841baf50cdaa368f3
+Authorization: coba123
+Content-Type: application/json
+
+{
+    "name": "Mahaputra",
+    "email": "iosefalbert@gmail.com",
+    "password" : "albert1234"
+}
