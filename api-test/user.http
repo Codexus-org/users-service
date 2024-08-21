@@ -1,0 +1,12 @@
+### Create User
+POST http://localhost:8000/users-services
+Content-Type: application/json
+
+{
+    "name": "Albert",
+    "email": "iosefalbert@gmail.com",
+    "password" : "albert1234"
+}
+
+### Get All Users
+GET http:localhost:8000/users-services

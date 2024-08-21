@@ -5,8 +5,8 @@ import { IUser } from "../entities/user.entity";
 const UserRepository = {
     getAllUsers: async () => {
         try {
-            const users = await User.find();
-            return users;
+            const allUsers = await User.find();
+            return allUsers;
         } catch (error) {
             console.log(`Error while getting all users: ${error}`);
         }
@@ -23,11 +23,14 @@ const UserRepository = {
 
     createUser: async (user: IUser) => {
         try {
-            const { name, email, password } = new User(user);
+            const { name, email, password } = user;
             
             const hashPassword = await bcrypt.hash(password, 13);
-            await newUser.save();
-            return newUser;
+            
+            const newUser = new User({ name, email, password: hashPassword });
+
+            const savedUser = await newUser.save();
+            return savedUser;
         } catch (error) {
             console.log(`Error while creating user: ${error}`);
         }

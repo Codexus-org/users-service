@@ -4,8 +4,8 @@ import { IUser } from "../entities/user.entity";
 const UserService = {
     getAllUsers: async () => {
         try {
-            const users = await UserRepository.getAllUsers();
-            return users;
+            const allUsers = await UserRepository.getAllUsers();
+            return allUsers;
         } catch (error) {
             console.log(error);
         }
@@ -30,4 +30,4 @@ const UserService = {
     }
 };
 
-export default UserServices;
+export default UserService;
