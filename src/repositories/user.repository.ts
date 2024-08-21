@@ -1,4 +1,6 @@
+import bcrypt from "bcrypt";
 import { User } from "../models/user.schema"
+import { IUser } from "../entities/user.entity";
 
 const UserRepository = {
     getAllUsers: async () => {
@@ -21,7 +23,9 @@ const UserRepository = {
 
     createUser: async (user: IUser) => {
         try {
-            const newUser = new User(user);
+            const { name, email, password } = new User(user);
+            
+            const hashPassword = await bcrypt.hash(password, 13);
             await newUser.save();
             return newUser;
         } catch (error) {

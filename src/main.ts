@@ -7,13 +7,14 @@ dotenv.config();
 
 mongoose
     .connect(process.env.MONGO_URI as string)
-    .then(() => console.log('Connected to MongoDB')
-    .catch((error) => {
-        console.log("Mongodb connection error failed")
-        console.log(error)
-    }));
+    .then(() => console.log("Mongodb connection success"))
+    .catch((error)=> {
+        console.log("Mongodb connection failed")
+        console.log(error);
+    });
 
 const app = express();
+
 app.use(express.json());
 
 app.listen(process.env.PORT, () => {

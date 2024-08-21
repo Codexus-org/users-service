@@ -7,7 +7,7 @@ const UserService = {
             const users = await UserRepository.getAllUsers();
             return users;
         } catch (error) {
-            console.log(`Error while getting all users: ${error}`);
+            console.log(error);
         }
     },
 
@@ -25,7 +25,7 @@ const UserService = {
             const newUser = await UserRepository.createUser(user);
             return newUser;
         } catch (error) {
-            console.log(`Error while creating user: ${error}`);
+            console.log(error);
         }
     }
 };
