@@ -32,20 +32,24 @@ const UserController = {
     },
 
     handleLoginUser: async (req: Request, res: Response) => {
-        const {email, password, accessToken, refreshToken} = req.body;
+        const {email, password} = req.body;
         try {
             const userLogin = await UserService.loginUser({email, password});
 
-            return res
-                .status(200)
-                .cookie("accessToken", accessToken, { httpOnly: true })
-                .cookie("refreshToken", refreshToken, { httpOnly: true })
-                .json({ message: "User logged in", data: userLogin });
+            if (userLogin && typeof userLogin === 'object') {
+                const {accessToken, refreshToken} = userLogin as { accessToken: string; refreshToken: string; };
+                // rest of your code
+                return res
+                    .cookie("accessToken", accessToken, { httpOnly: true })
+                    .cookie("refreshToken", refreshToken, { httpOnly: true })
+                    .status(200)
+                    .json({ message: "User logged in"});
+            }
         } catch (error) {
             console.log(error);
         }
     },
-    
+
     handleDeleteUser: async (req: Request, res: Response) => {
         const userId = req.params.id;
         

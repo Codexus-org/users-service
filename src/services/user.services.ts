@@ -63,17 +63,18 @@ const UserService = {
             };
 
             //create token
-            const accessToken = await jwt.sign(payload, process.env.JWT_ACCESS_SECRET as string, { expiresIn: 300 });
-            const refreshToken = await jwt.sign(payload, process.env.JWT_REFRESH_SECRET as string, { expiresIn: "7d" });
+            const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET as string, { expiresIn: 300 });
+            const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET as string, { expiresIn: "7d" });
 
+            const token = { accessToken, refreshToken };
             //save refresh token in db
             const newRefreshToken = new Auth({
                 userId: user.id,
-                refreshToken
+                refreshToken,
             });
             await newRefreshToken.save();
 
-            return { email, password, accessToken, refreshToken };
+            return token;
         } catch (error) {
             console.log(`Error while login user: ${error}`);
         }
