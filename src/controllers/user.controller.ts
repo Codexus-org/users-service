@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import UserService from "../services/user.services";
+import { Auth } from "../models/auth.schema";
 
 const UserController = {
     // Get all users
@@ -46,7 +47,9 @@ const UserController = {
                     .json({ message: "User logged in"});
             }
         } catch (error) {
-            console.log(error);
+            if (error instanceof Error) {
+                return res.status(401).json({ message: error.message });
+            }
         }
     },
 
@@ -75,6 +78,14 @@ const UserController = {
         } catch (error) {
             console.log(error);
         }
+    },
+
+    handleLogoutUser: async (req: Request, res: Response) => {
+        const { refreshToken } = req.cookies;
+
+        await Auth.findOneAndDelete({ refreshToken });
+
+        return res.clearCookie("accessToken").clearCookie("refreshToken").status(200).json({ message: "User logged out" });
     }
 };
 
