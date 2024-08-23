@@ -32,24 +32,20 @@ const UserController = {
     },
 
     handleLoginUser: async (req: Request, res: Response) => {
-        const { email, password } = req.body;
+        const {email, password, accessToken, refreshToken} = req.body;
         try {
-            const userLogin = await UserService.loginUser({ email, password });
+            const userLogin = await UserService.loginUser({email, password});
 
-            if ( userLogin === "User not found") {
-                return res.status(404).json({ message: userLogin });
-            }
-
-            if ( userLogin === "Invalid password") {
-                return res.status(401).json({ message: "Invalid credentials" });
-            }
-
-            return res.status(200).json({ message: "User logged in", data: userLogin });
+            return res
+                .status(200)
+                .cookie("accessToken", accessToken, { httpOnly: true })
+                .cookie("refreshToken", refreshToken, { httpOnly: true })
+                .json({ message: "User logged in", data: userLogin });
         } catch (error) {
             console.log(error);
         }
     },
-
+    
     handleDeleteUser: async (req: Request, res: Response) => {
         const userId = req.params.id;
         
