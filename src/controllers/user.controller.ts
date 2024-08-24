@@ -66,6 +66,7 @@ const UserController = {
 
     handleUpdateUser: async (req: Request, res: Response) => {
         const userId = req.params.id;
+        
         const userHeader = req.headers.authorization;
         const { name, email, password } = req.body;
         try {
