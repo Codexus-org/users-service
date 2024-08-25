@@ -67,12 +67,12 @@ const UserController = {
     handleUpdateUser: async (req: Request, res: Response) => {
         const userId = req.params.id;
         
-        const userHeader = req.headers.authorization;
+        // const userHeader = req.headers.authorization;
         const { name, email, password } = req.body;
         try {
-            if (!userHeader) {
-                return res.status(401).json({ message: "Unauthorized" });
-            };
+            // if (!userHeader) {
+                // return res.status(401).json({ message: "Unauthorized" });
+            // };
 
             const updatedUser = await UserService.updateUser(userId, { name, email, password });
             return res.status(200).json({ message: "User updated", data: updatedUser });

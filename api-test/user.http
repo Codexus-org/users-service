@@ -1,5 +1,5 @@
 ### Create User
-POST http://localhost:8000/users-services
+POST http://localhost:8002/users-services
 Content-Type: application/json
 
 {
@@ -9,13 +9,13 @@ Content-Type: application/json
 }
 
 ### Get All Users
-GET http://localhost:8000/users-services
+GET http://localhost:8002/users-services
 
 ### Get User by ID
-GET http://localhost:8000/users-services/66c5435841baf50cdaa368f5
+GET http://localhost:8002/users-services/66c5435841baf50cdaa368f5
 
 ### Login User
-POST http://localhost:8000/users-services/login
+POST http://localhost:8002/users-services/login
 Content-Type: application/json
 
 {
@@ -24,17 +24,17 @@ Content-Type: application/json
 }
 
 ### Delete User
-DELETE http://localhost:8000/users-services/66c5435841baf50cdaa368f5
+DELETE http://localhost:8002/users-services/66c5435841baf50cdaa368f5
 
 ### Update User
-PATCH http://localhost:8000/users-services/66c542d841baf50cdaa368f3
+PATCH http://localhost:8002/users-services/66c7f5e4874e88bb94590cdb
 Content-Type: application/json
 
 {
-    "name": "Mahaputra",
-    "email": "putrapetir@gmail.com",
-    "password" : "putra1234"
+    "name": "Iosef Albert",
+    "email": "iosefalbert@gmail.com",
+    "password" : "albert1234"
 }
 
 ## Logout User
-POST http://localhost:8000/users-services/logout
+POST http://localhost:8002/users-services/logout
