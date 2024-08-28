@@ -5,5 +5,5 @@ const mongoose_1 = require("mongoose");
 const authSchema = new mongoose_1.Schema({
     userId: String,
     refreshToken: String,
-});
+}, { versionKey: false });
 exports.Auth = (0, mongoose_1.model)("Auth", authSchema);

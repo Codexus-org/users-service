@@ -10,8 +10,8 @@ const auth_middleware_1 = __importDefault(require("../middleware/auth.middleware
 exports.userRouter = express_1.default.Router();
 exports.userRouter.get("/", user_controller_1.default.handleGetAllUsers);
 exports.userRouter.get("/:id", user_controller_1.default.handleGetUser);
-exports.userRouter.post("/", user_controller_1.default.handleCreateUser);
+exports.userRouter.post("/register", user_controller_1.default.handleCreateUser);
 exports.userRouter.post("/login", user_controller_1.default.handleLoginUser);
 exports.userRouter.post("/logout", auth_middleware_1.default, user_controller_1.default.handleLogoutUser);
-exports.userRouter.delete("/:id", user_controller_1.default.handleDeleteUser);
-exports.userRouter.patch("/:id", user_controller_1.default.handleUpdateUser);
+exports.userRouter.delete("/delete/:id", auth_middleware_1.default, user_controller_1.default.handleDeleteUser);
+exports.userRouter.patch("/update/:id", auth_middleware_1.default, user_controller_1.default.handleUpdateUser);

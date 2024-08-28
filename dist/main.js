@@ -19,7 +19,8 @@ mongoose_1.default
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
-app.use("/users-services", user_route_1.userRouter);
+// app.use(middlewareCheckOrigin);
+app.use("/forumapp/api/v1/users-services", user_route_1.userRouter);
 app.listen(process.env.PORT, () => {
     console.log(`Server started on port ${process.env.PORT}`);
 });

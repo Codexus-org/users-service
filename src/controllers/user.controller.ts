@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import UserService from "../services/user.services";
 import { Auth } from "../models/auth.schema";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 const UserController = {
     // Get all users
@@ -33,8 +35,8 @@ const UserController = {
     },
 
     handleLoginUser: async (req: Request, res: Response) => {
-        const {email, password} = req.body;
         try {
+            const {email, password} = req.body;
             const userLogin = await UserService.loginUser({email, password});
 
             if (userLogin && typeof userLogin === 'object') {
@@ -54,10 +56,11 @@ const UserController = {
     },
 
     handleDeleteUser: async (req: Request, res: Response) => {
-        const userId = req.params.id;
-        
         try {
-            const deletedUser = await UserService.deleteUser(userId);
+            const {accessToken}= req.cookies;
+            const payload = jwt.decode(accessToken) as { id: string, name: string, email: string };
+
+            const deletedUser = await UserService.deleteUser(payload.id);
             return res.status(200).json({ message: "User deleted", data: deletedUser });
         } catch (error) {
             console.log(error);
@@ -65,16 +68,15 @@ const UserController = {
     },
 
     handleUpdateUser: async (req: Request, res: Response) => {
-        const userId = req.params.id;
-        
-        // const userHeader = req.headers.authorization;
-        const { name, email, password } = req.body;
         try {
-            // if (!userHeader) {
-                // return res.status(401).json({ message: "Unauthorized" });
-            // };
+            const {accessToken} =req.cookies;
+            const payload = jwt.decode(accessToken) as { id: string, name: string, email: string };
 
-            const updatedUser = await UserService.updateUser(userId, { name, email, password });
+            const { name, email, password } = req.body;
+            
+            const hashPassword = await bcrypt.hash(password, 13);
+
+            const updatedUser = await UserService.updateUser(payload.id, { name, email, password: hashPassword });
             return res.status(200).json({ message: "User updated", data: updatedUser });
         } catch (error) {
             console.log(error);

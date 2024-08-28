@@ -14,6 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_services_1 = __importDefault(require("../services/user.services"));
 const auth_schema_1 = require("../models/auth.schema");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const UserController = {
     // Get all users
     handleGetAllUsers: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -41,8 +43,8 @@ const UserController = {
         return res.status(200).json({ message: "User", data: user });
     }),
     handleLoginUser: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const { email, password } = req.body;
         try {
+            const { email, password } = req.body;
             const userLogin = yield user_services_1.default.loginUser({ email, password });
             if (userLogin && typeof userLogin === 'object') {
                 const { accessToken, refreshToken } = userLogin;
@@ -61,9 +63,10 @@ const UserController = {
         }
     }),
     handleDeleteUser: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const userId = req.params.id;
         try {
-            const deletedUser = yield user_services_1.default.deleteUser(userId);
+            const { accessToken } = req.cookies;
+            const payload = jsonwebtoken_1.default.decode(accessToken);
+            const deletedUser = yield user_services_1.default.deleteUser(payload.id);
             return res.status(200).json({ message: "User deleted", data: deletedUser });
         }
         catch (error) {
@@ -71,15 +74,12 @@ const UserController = {
         }
     }),
     handleUpdateUser: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const userId = req.params.id;
-        const userHeader = req.headers.authorization;
-        const { name, email, password } = req.body;
         try {
-            if (!userHeader) {
-                return res.status(401).json({ message: "Unauthorized" });
-            }
-            ;
-            const updatedUser = yield user_services_1.default.updateUser(userId, { name, email, password });
+            const { accessToken } = req.cookies;
+            const payload = jsonwebtoken_1.default.decode(accessToken);
+            const { name, email, password } = req.body;
+            const hashPassword = yield bcrypt_1.default.hash(password, 13);
+            const updatedUser = yield user_services_1.default.updateUser(payload.id, { name, email, password: hashPassword });
             return res.status(200).json({ message: "User updated", data: updatedUser });
         }
         catch (error) {

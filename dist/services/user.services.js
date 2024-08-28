@@ -48,19 +48,19 @@ const UserService = {
         const { email, password } = loginData;
         try {
             if (!email || password.length < 8) {
-                return "email should be valid and password should have minimum 8 characters";
+                throw new Error("email should be valid and password should have minimum 8 characters");
             }
             // find user
             const user = yield user_repository_1.default.loginUser(email);
             // check if user exists
             if (!user) {
-                return "User not found";
+                throw new Error("Invalid credentials");
             }
             // compare password
             const isPassMatch = yield bcrypt_1.default.compare(password, user.password);
             // check if password matches
             if (!isPassMatch) {
-                return "Invalid password";
+                throw new Error("Invalid credentials");
             }
             const payload = {
                 id: user.id,

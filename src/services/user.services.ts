@@ -37,7 +37,7 @@ const UserService = {
 
         try {            
             if (!email || password.length < 8) {
-                return "email should be valid and password should have minimum 8 characters";
+                throw new Error("email should be valid and password should have minimum 8 characters");
             }
 
             // find user
@@ -45,7 +45,7 @@ const UserService = {
 
             // check if user exists
             if (!user) {
-                return "User not found";
+                throw new Error("Invalid credentials");
             }
 
             // compare password
@@ -53,7 +53,7 @@ const UserService = {
 
             // check if password matches
             if (!isPassMatch) {
-                return "Invalid password";
+                throw new Error("Invalid credentials");
             }
 
             const payload = {
@@ -67,6 +67,7 @@ const UserService = {
             const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET as string, { expiresIn: "7d" });
 
             const token = { accessToken, refreshToken };
+            
             //save refresh token in db
             const newRefreshToken = new Auth({
                 userId: user.id,
