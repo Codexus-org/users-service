@@ -20,7 +20,7 @@ Content-Type: application/json
 
 {
     "email": "asepjaya@gmail.com",
-    "password" : "Asepjaya1234!"
+    "password" : "asepjaya1234"
 }
 
 ### Delete User
