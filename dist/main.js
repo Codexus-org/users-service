@@ -8,6 +8,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const user_route_1 = require("./routes/user.route");
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const api_gateway_middleware_1 = require("./middleware/api-gateway.middleware");
 dotenv_1.default.config();
 mongoose_1.default
     .connect(process.env.MONGO_URI)
@@ -19,7 +20,7 @@ mongoose_1.default
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
-// app.use(middlewareCheckOrigin);
+app.use(api_gateway_middleware_1.middlewareCheckOrigin);
 app.use("/forumapp/api/v1/users-services", user_route_1.userRouter);
 app.listen(process.env.PORT, () => {
     console.log(`Server started on port ${process.env.PORT}`);
