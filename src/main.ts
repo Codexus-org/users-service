@@ -20,7 +20,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-// app.use(middlewareCheckOrigin);
+app.use(middlewareCheckOrigin);
 
 app.use("/forumapp/api/v1/users-services", userRouter);
 

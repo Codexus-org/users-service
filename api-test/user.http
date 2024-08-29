@@ -1,5 +1,5 @@
 ### Create User
-POST http://localhost:8000/forumapp/api/v1/users-services/register
+POST http://108.136.118.28:8002/forumapp/api/v1/users-services/register
 Content-Type: application/json
 
 {
@@ -15,7 +15,7 @@ GET http://localhost:8000/forumapp/api/v1/users-services
 GET http://localhost:8000/users-services/66c5435841baf50cdaa368f5
 
 ### Login User
-POST http://localhost:8000/forumapp/api/v1/users-services/login
+POST http://108.136.118.28:8002/forumapp/api/v1/users-services/login
 Content-Type: application/json
 
 {
