@@ -38,6 +38,10 @@ const UserService = {
     createUser: (user) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const newUser = yield user_repository_1.default.createUser(user);
+            // create checking logic for user already registered
+            if (!user.email) {
+                throw new Error("email already registered");
+            }
             return newUser;
         }
         catch (error) {

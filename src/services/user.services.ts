@@ -26,6 +26,12 @@ const UserService = {
     createUser: async (user: IUser) => {
         try {
             const newUser = await UserRepository.createUser(user);
+
+            // create checking logic for user already registered
+            if (!user.email){
+                throw new Error("email already registered");
+            }
+
             return newUser;
         } catch (error) {
             console.log(error);
