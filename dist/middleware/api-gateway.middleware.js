@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.middlewareCheckOrigin = middlewareCheckOrigin;
 function middlewareCheckOrigin(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (req.headers.host === "16.78.80.212:3000") {
+        if (req.headers.host === "16.78.80.212:3001") {
             next();
             return;
         }
