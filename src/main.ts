@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import { userRouter } from './routes/user.route';
+import { authRouter } from './routes/auth.route';
 import cookieParser from 'cookie-parser';
 import { middlewareCheckOrigin } from './middleware/api-gateway.middleware';
 
@@ -22,6 +23,7 @@ app.use(cookieParser());
 
 app.use(middlewareCheckOrigin);
 
+app.use("/forumapp/api/v1/auth", authRouter);
 app.use("/forumapp/api/v1/users-services", userRouter);
 
 app.listen(process.env.PORT, () => {

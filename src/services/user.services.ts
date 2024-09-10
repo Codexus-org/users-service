@@ -14,9 +14,9 @@ const UserService = {
         }
     },
 
-    getUser: async (id: string) => {
+    getUser: async (email: string) => {
         try {
-            const user = await UserRepository.getUser(id);
+            const user = await UserRepository.getUser(email);
             return user;
         } catch (error) {
             console.log(`Error while getting user: ${error}`);
@@ -73,14 +73,14 @@ const UserService = {
             const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET as string, { expiresIn: "7d" });
 
             const token = { accessToken, refreshToken };
-            
+            const userId = user.id;
             //save refresh token in db
             const newRefreshToken = new Auth({
                 userId: user.id,
                 refreshToken,
             });
             await newRefreshToken.save();
-
+            console.log(userId);
             return token;
         } catch (error) {
             console.log(`Error while login user: ${error}`);

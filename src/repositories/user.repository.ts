@@ -12,9 +12,9 @@ const UserRepository = {
         }
     },
 
-    getUser: async (id: string) => {
+    getUser: async (email: string) => {
         try {
-            const user = await User.findById(id);
+            const user = await User.findOne({ email });
             return user;
         } catch (error) {
             console.log(`Error while getting user: ${error}`);

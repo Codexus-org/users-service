@@ -3,6 +3,7 @@ import UserService from "../services/user.services";
 import { Auth } from "../models/auth.schema";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import AuthServices from "../services/auth.service";
 
 const UserController = {
     // Get all users
@@ -34,26 +35,24 @@ const UserController = {
         return res.status(200).json({ message: "User", data: user });
     },
 
-    handleLoginUser: async (req: Request, res: Response) => {
-        try {
-            const {email, password} = req.body;
-            const userLogin = await UserService.loginUser({email, password});
-
-            if (userLogin && typeof userLogin === 'object') {
-                const {accessToken, refreshToken} = userLogin as { accessToken: string; refreshToken: string; };
-                // rest of your code
-                return res
-                    .cookie("accessToken", accessToken, { httpOnly: true })
-                    .cookie("refreshToken", refreshToken, { httpOnly: true })
-                    .status(200)
-                    .json({ message: "User logged in"});
-            }
-        } catch (error) {
-            if (error instanceof Error) {
-                return res.status(401).json({ message: error.message });
-            }
-        }
-    },
+    // handleLoginUser: async (req: Request, res: Response) => {
+    //     try {
+    //         const {email, password} = req.body;
+    //         const userLogin = await AuthServices.loginUser({email, password});
+            
+    //         const {accessToken, refreshToken} = userLogin as { accessToken: string; refreshToken: string; };
+    //         return res
+    //                 .cookie("accessToken", accessToken, { httpOnly: true })
+    //                 .cookie("refreshToken", refreshToken, { httpOnly: true })
+    //                 .status(200)
+    //                 .json({ message: "User logged in"});
+            
+    //     } catch (error) {
+    //         if (error instanceof Error) {
+    //             return res.status(401).json({ message: error.message });
+    //         }
+    //     }
+    // },
 
     handleDeleteUser: async (req: Request, res: Response) => {
         try {
@@ -84,9 +83,9 @@ const UserController = {
     },
 
     handleLogoutUser: async (req: Request, res: Response) => {
-        const { refreshToken } = req.cookies;
+        const { refreshToken } = req.body;
 
-        await Auth.findOneAndDelete({ refreshToken });
+        await AuthServices.userLogout(refreshToken);
 
         return res.clearCookie("accessToken").clearCookie("refreshToken").status(200).json({ message: "User logged out" });
     }
