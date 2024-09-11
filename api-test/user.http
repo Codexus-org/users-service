@@ -15,7 +15,7 @@ GET http://localhost:3001/users-services/
 GET http://16.78.80.212:3001/
 
 ### Get User by ID
-GET http://localhost:8000/users-services/66c5435841baf50cdaa368f5
+GET http://localhost:3001/users-services/66c5435841baf50cdaa368f5
 
 ### Login User
 POST http://localhost:3001/auth/login
@@ -23,14 +23,14 @@ Content-Type: application/json
 
 {
     "email": "asepjaya@gmail.com",
-    "password" : "Asepjaya1234!"
+    "password" : "asepjaya1234"
 }
 
 ### Delete User
-DELETE http://localhost:8000/forumapp/api/v1/users-services/delete/66c5435841baf50cdaa368f5
+DELETE http://localhost:3001/forumapp/api/v1/users-services/delete/66c5435841baf50cdaa368f5
 
 ### Update User
-PATCH http://localhost:8000/users-services/update/66cc246cf49e2b8d810ac5ae
+PATCH http://localhost:3001/users-services/update/66cc246cf49e2b8d810ac5ae
 Content-Type: application/json
 
 {
