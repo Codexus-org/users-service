@@ -3,6 +3,21 @@ import AuthServices from "../services/auth.service";
 import UserService from "../services/user.services";
 
 const AuthControllers = {
+    // Create user
+    handleCreateUser: async (req: Request, res: Response) => {
+        const { name, email, password } = req.body;
+        const newUser = await UserService.createUser({ name, email, password });
+
+        if (!newUser){
+            return res.status(401).json({ message: "Failed Create User" });
+        }
+        
+        try {
+            return res.status(201).json({ message: "User created", data: newUser });
+        } catch (error) {
+            console.log(error);
+        }
+    },
 
     handleLogin: async (req: Request, res: Response, next: NextFunction) => {
         try {
@@ -44,7 +59,12 @@ const AuthControllers = {
 
         try {
             const authorizeUser = await AuthServices.verifyAccessToken(accessToken, refreshToken);
-             return res.status(200).json({ message: "User authorized", data: authorizeUser });
+            console.log('auth controller: ', authorizeUser);
+            return res
+                // .cookie("accessToken", accessToken, { httpOnly: true })
+                // .cookie("refreshToken", refreshToken, { httpOnly: true })
+                .status(200)
+                .json({ message: "User authorized", data: authorizeUser });
         } catch (error) {
             next(error);
         }

@@ -13,6 +13,7 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
     // Check if access token exists
     if (accessToken) {
         try {
+            console.log(accessToken);
             jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET as string);
         } catch (error) {
             // If refresh token doesn't exist, regenerate new access token from refresh token
