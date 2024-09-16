@@ -16,6 +16,7 @@ const UserController = {
     handleGetUser: async (req: Request, res: Response) => {
         const { id } = req.params;
         const user = await UserService.getUser(id);
+        console.log(user);
         return res.status(200).json({ message: "User", data: user });
     },
 

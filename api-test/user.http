@@ -1,11 +1,11 @@
 ### Create User
-POST http://localhost:3001/users-services/register
+POST http://localhost:3001/auth/register
 Content-Type: application/json
 
 {
-    "name": "Asep",
-    "email": "asepjaya@gmail.com",
-    "password" : "asepjaya1234"
+    "name": "Putra",
+    "email": "putrajaya@gmail.com",
+    "password" : "putrajaya1234"
 }
 
 ### Get All Users
@@ -26,6 +26,9 @@ Content-Type: application/json
     "password" : "asepjaya1234"
 }
 
+### Logout User
+POST http://localhost:3001/auth/logout
+
 ### Delete User
 DELETE http://localhost:3001/forumapp/api/v1/users-services/delete/66c5435841baf50cdaa368f5
 
@@ -39,5 +42,3 @@ Content-Type: application/json
     "password" : "Asepjaya1234!"
 }
 
-### Logout User
-POST http://localhost:3001/auth/logout

@@ -56,17 +56,19 @@ const AuthServices = {
 
     verifyAccessToken: async (accessToken: string, refreshToken: string) => {
         // Check if access token and refresh token doesn't exist
-        if (!accessToken || !refreshToken) {
+        if (!accessToken && !refreshToken) {
             throw new Error("accessToken and refreshToken are required");
         }
 
         // Check if access token exists
         if (accessToken) {
             try {
+                console.log('accessToken auth.service: ',accessToken);
                 jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET as string);
                 const payload = jwt.decode(accessToken) as { id: string, name: string, email: string };
                 return { userId: payload.id, refreshToken, accessToken };
             } catch (error) {
+                
                 // If refresh token doesn't exist, regenerate new access token from refresh token
                 if (!refreshToken) {
                     throw new Error("refreshToken is required");
@@ -74,16 +76,17 @@ const AuthServices = {
                 try {
                     // Check if refresh token valid
                     jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET as string);
-
+  
                     // If refresh token valid, verify resfresh token in db
                     const activateRefreshToken = await AuthRepository.getAuth(refreshToken);
 
                     if (!activateRefreshToken) {
                         throw new Error("refreshToken invalid");
                     }
-
+                    console.log(activateRefreshToken);
+                    console.log(refreshToken);
                     const payload = jwt.decode(refreshToken) as { id: string, name: string, email: string };
-
+                    console.log(payload);
                     // Generate new access token
                     const newAccessToken = jwt.sign(
                         { id: payload.id, name: payload.name, email: payload.email },

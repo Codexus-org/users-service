@@ -60,7 +60,12 @@ const AuthControllers = {
 
         try {
             const authorizeUser = await AuthServices.verifyAccessToken(accessToken, refreshToken);
-             return res.status(200).json({ message: "User authorized", data: authorizeUser });
+            console.log('auth controller: ', authorizeUser);
+            return res
+                // .cookie("accessToken", accessToken, { httpOnly: true })
+                // .cookie("refreshToken", refreshToken, { httpOnly: true })
+                .status(200)
+                .json({ message: "User authorized", data: authorizeUser });
         } catch (error) {
             next(error);
         }
