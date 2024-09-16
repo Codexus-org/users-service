@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import AuthServices from "../services/auth.service";
 import UserService from "../services/user.services";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 const AuthControllers = {
     // Create user
@@ -68,7 +70,23 @@ const AuthControllers = {
         } catch (error) {
             next(error);
         }
-    }
+    },
+
+    handleUpdateUser: async (req: Request, res: Response) => {
+        try {
+            const {accessToken} =req.cookies;
+            const payload = jwt.decode(accessToken) as { id: string, name: string, email: string };
+
+            const { name, email, password } = req.body;
+            
+            const hashPassword = await bcrypt.hash(password, 13);
+
+            const updatedUser = await UserService.updateUser(payload.id, { name, email, password: hashPassword });
+            return res.status(200).json({ message: "User updated", data: updatedUser });
+        } catch (error) {
+            console.log(error);
+        }
+    },
 }
 
 export default AuthControllers;

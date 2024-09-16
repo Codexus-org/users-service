@@ -16,6 +16,7 @@ const UserController = {
     handleGetUser: async (req: Request, res: Response) => {
         const { id } = req.params;
         const user = await UserService.getUser(id);
+        console.log(user);
         return res.status(200).json({ message: "User", data: user });
     },
 
@@ -30,22 +31,6 @@ const UserController = {
             console.log(error);
         }
     },
-
-    handleUpdateUser: async (req: Request, res: Response) => {
-        try {
-            const {accessToken} =req.cookies;
-            const payload = jwt.decode(accessToken) as { id: string, name: string, email: string };
-
-            const { name, email, password } = req.body;
-            
-            const hashPassword = await bcrypt.hash(password, 13);
-
-            const updatedUser = await UserService.updateUser(payload.id, { name, email, password: hashPassword });
-            return res.status(200).json({ message: "User updated", data: updatedUser });
-        } catch (error) {
-            console.log(error);
-        }
-    }
 };
 
 export default UserController;
