@@ -65,6 +65,8 @@ const AuthServices = {
             try {
                 console.log('accessToken auth.service: ',accessToken);
                 jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET as string);
+                const payload = jwt.decode(accessToken) as { id: string, name: string, email: string };
+                return { userId: payload.id, refreshToken, accessToken };
             } catch (error) {
                 
                 // If refresh token doesn't exist, regenerate new access token from refresh token
@@ -91,8 +93,8 @@ const AuthServices = {
                         process.env.JWT_ACCESS_SECRET as string,
                         { expiresIn: 300 }
                     );
-                    // console.log(newAccessToken);
-                    return { UserId: payload.id, refreshToken, accessToken: newAccessToken };
+                    
+                    return { userId: payload.id, refreshToken, accessToken: newAccessToken };
                 } catch (error) {
                     // If invalid refresh token, return unauthorized
                     throw new Error("Invalid refreshToken");

@@ -31,6 +31,14 @@ const UserController = {
             console.log(error);
         }
     },
+
+    handleLogoutUser: async (req: Request, res: Response) => {
+        const { refreshToken } = req.body;
+
+        await AuthServices.userLogout(refreshToken);
+
+        return res.clearCookie("accessToken").clearCookie("refreshToken").status(200).json({ message: "User logged out" });
+    }
 };
 
 export default UserController;

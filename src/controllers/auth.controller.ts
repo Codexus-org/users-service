@@ -5,8 +5,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 const AuthControllers = {
-    // Create user
-    handleCreateUser: async (req: Request, res: Response) => {
+    handleCreateUser: async (req: Request, res: Response, next: NextFunction) => {
         const { name, email, password } = req.body;
         const newUser = await UserService.createUser({ name, email, password });
 
