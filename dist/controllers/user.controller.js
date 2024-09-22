@@ -13,54 +13,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_services_1 = __importDefault(require("../services/user.services"));
-const auth_schema_1 = require("../models/auth.schema");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const auth_service_1 = __importDefault(require("../services/auth.service"));
 const UserController = {
     // Get all users
     handleGetAllUsers: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const allUsers = yield user_services_1.default.getAllUsers();
         return res.status(200).json({ message: "All users", data: allUsers });
     }),
-    // Create user
-    handleCreateUser: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const { name, email, password } = req.body;
-        const newUser = yield user_services_1.default.createUser({ name, email, password });
-        if (!newUser) {
-            return res.status(401).json({ message: "Failed Create User" });
-        }
-        try {
-            return res.status(201).json({ message: "User created", data: newUser });
-        }
-        catch (error) {
-            console.log(error);
-        }
-    }),
     // Get user
     handleGetUser: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const { id } = req.params;
         const user = yield user_services_1.default.getUser(id);
+        console.log(user);
         return res.status(200).json({ message: "User", data: user });
-    }),
-    handleLoginUser: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        try {
-            const { email, password } = req.body;
-            const userLogin = yield user_services_1.default.loginUser({ email, password });
-            if (userLogin && typeof userLogin === 'object') {
-                const { accessToken, refreshToken } = userLogin;
-                // rest of your code
-                return res
-                    .cookie("accessToken", accessToken, { httpOnly: true })
-                    .cookie("refreshToken", refreshToken, { httpOnly: true })
-                    .status(200)
-                    .json({ message: "User logged in" });
-            }
-        }
-        catch (error) {
-            if (error instanceof Error) {
-                return res.status(401).json({ message: error.message });
-            }
-        }
     }),
     handleDeleteUser: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
@@ -73,22 +39,9 @@ const UserController = {
             console.log(error);
         }
     }),
-    handleUpdateUser: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        try {
-            const { accessToken } = req.cookies;
-            const payload = jsonwebtoken_1.default.decode(accessToken);
-            const { name, email, password } = req.body;
-            const hashPassword = yield bcrypt_1.default.hash(password, 13);
-            const updatedUser = yield user_services_1.default.updateUser(payload.id, { name, email, password: hashPassword });
-            return res.status(200).json({ message: "User updated", data: updatedUser });
-        }
-        catch (error) {
-            console.log(error);
-        }
-    }),
     handleLogoutUser: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const { refreshToken } = req.cookies;
-        yield auth_schema_1.Auth.findOneAndDelete({ refreshToken });
+        const { refreshToken } = req.body;
+        yield auth_service_1.default.userLogout(refreshToken);
         return res.clearCookie("accessToken").clearCookie("refreshToken").status(200).json({ message: "User logged out" });
     })
 };

@@ -12,11 +12,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.middlewareCheckOrigin = middlewareCheckOrigin;
 function middlewareCheckOrigin(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (req.headers.host === "16.78.80.212:3001") {
-            next();
-            return;
+        //console.log(req.headers.host);
+        if (req.headers.host === "localhost:3001") {
+            return next();
         }
-        return res.status(401).json({ message: "Unauthorized" });
+        return res.status(401).json({ message: "You are not allowed" });
     });
 }
 ;

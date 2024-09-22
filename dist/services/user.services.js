@@ -13,9 +13,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_repository_1 = __importDefault(require("../repositories/user.repository"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const auth_schema_1 = require("../models/auth.schema");
 const UserService = {
     getAllUsers: () => __awaiter(void 0, void 0, void 0, function* () {
         try {
@@ -26,9 +23,9 @@ const UserService = {
             console.log(error);
         }
     }),
-    getUser: (id) => __awaiter(void 0, void 0, void 0, function* () {
+    getUser: (email) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const user = yield user_repository_1.default.getUser(id);
+            const user = yield user_repository_1.default.getUser(email);
             return user;
         }
         catch (error) {
@@ -46,45 +43,6 @@ const UserService = {
         }
         catch (error) {
             console.log(error);
-        }
-    }),
-    loginUser: (loginData) => __awaiter(void 0, void 0, void 0, function* () {
-        const { email, password } = loginData;
-        try {
-            if (!email || password.length < 8) {
-                throw new Error("email should be valid and password should have minimum 8 characters");
-            }
-            // find user
-            const user = yield user_repository_1.default.loginUser(email);
-            // check if user exists
-            if (!user) {
-                throw new Error("Invalid credentials");
-            }
-            // compare password
-            const isPassMatch = yield bcrypt_1.default.compare(password, user.password);
-            // check if password matches
-            if (!isPassMatch) {
-                throw new Error("Invalid credentials");
-            }
-            const payload = {
-                id: user.id,
-                name: user.name,
-                email: user.email
-            };
-            //create token
-            const accessToken = jsonwebtoken_1.default.sign(payload, process.env.JWT_ACCESS_SECRET, { expiresIn: 300 });
-            const refreshToken = jsonwebtoken_1.default.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
-            const token = { accessToken, refreshToken };
-            //save refresh token in db
-            const newRefreshToken = new auth_schema_1.Auth({
-                userId: user.id,
-                refreshToken,
-            });
-            yield newRefreshToken.save();
-            return token;
-        }
-        catch (error) {
-            console.log(`Error while login user: ${error}`);
         }
     }),
     deleteUser: (id) => __awaiter(void 0, void 0, void 0, function* () {

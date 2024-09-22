@@ -8,40 +8,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const auth_schema_1 = require("../models/auth.schema");
-const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { accessToken, refreshToken } = req.cookies;
-    if (!accessToken && !refreshToken) {
-        return res.status(401).json({ message: "Unauthorized" });
-    }
-    if (accessToken) {
+exports.verifyAccessToken = verifyAccessToken;
+function verifyAccessToken(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { accessToken, refreshToken } = req.cookies;
+        if (!accessToken) {
+            return res.status(401).json({ message: "Unauthorized: No access token provided. Please log in first." });
+        }
         try {
-            jsonwebtoken_1.default.verify(accessToken, process.env.JWT_ACCESS_SECRET);
+            const authorizeUser = yield fetch(`http://localhost:3001/auth/verify-token`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ accessToken, refreshToken })
+            });
+            const data = yield authorizeUser.json();
+            req.body.user = data.data;
+            if (!authorizeUser.ok) {
+                const error = yield authorizeUser.json();
+                throw new Error(error.message);
+            }
+            next();
         }
         catch (error) {
-            if (!refreshToken) {
-                return res.status(401).json({ message: "Unauthorized" });
-            }
-            try {
-                jsonwebtoken_1.default.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-                const activateRefreshToken = yield auth_schema_1.Auth.findOne({ refreshToken });
-                if (!activateRefreshToken) {
-                    return res.status(401).json({ message: "Unauthorized" });
-                }
-                const payload = jsonwebtoken_1.default.decode(refreshToken);
-                const newAccessToken = jsonwebtoken_1.default.sign({ id: payload.id, name: payload.name, email: payload.email }, process.env.JWT_ACCESS_SECRET, { expiresIn: 300 });
-                return res.cookie("accessToken", newAccessToken, { httpOnly: true }).status(200).json({ message: "User logged in" });
-            }
-            catch (error) {
-                return res.status(401).json({ message: "Unauthorized" });
-            }
+            // next(error);
+            res.status(401).json({ message: error.message });
         }
-    }
-    next();
-});
-exports.default = authMiddleware;
+    });
+}

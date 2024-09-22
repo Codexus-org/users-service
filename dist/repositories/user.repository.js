@@ -24,9 +24,9 @@ const UserRepository = {
             console.log(`Error while getting all users: ${error}`);
         }
     }),
-    getUser: (id) => __awaiter(void 0, void 0, void 0, function* () {
+    getUser: (email) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const user = yield user_schema_1.User.findById(id);
+            const user = yield user_schema_1.User.findOne({ email });
             return user;
         }
         catch (error) {
